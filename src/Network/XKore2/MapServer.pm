@@ -181,12 +181,15 @@ sub map_loaded {
 	$self->send_player_info($client, $char);
 	$self->send_avoid_sprite_error_hack($client, $char);
 	$self->send_npc_info($client);
-	$self->send_inventory($client, $char);
+	#$self->send_inventory($client, $char); # don't send INVENTORY because it's currently FUCKED
+	
+	# TODO: finish checking these
 	$self->send_ground_items($client);
 	$self->send_portals($client);
 	$self->send_npcs($client);
 	$self->send_monsters($client);
-	$self->send_npcs($client);
+	# missing a 'send mercenaries'
+	#$self->send_npcs($client); # why send NPCs twice?
 	$self->send_pets($client);
 	$self->send_vendors($client);
 	$self->send_chatrooms($client);
@@ -195,6 +198,13 @@ sub map_loaded {
 	$self->send_party_list($client, $char);
 	$self->send_pet($client);
 	$self->send_welcome($client);
+	$self->request_guild_info();
+
+	# load_confirm (unlock keyboard)
+	$self->unlock_keyboard($client);
+	
+	# unlock cart. might cause some weirdness
+	$self->unlock_cart($client);
 
 	$args->{mangle} = 2;
 	$RunOnce = 0;
@@ -228,6 +238,15 @@ sub send_quest_info {
 		$data .= pack('C2 v V', 0xB2, 0x02, length($m_output) + 8, $k) . $m_output;
 		$client->send($data);
 	}
+}
+
+sub request_guild_info {
+	$messageSender->sendGuildMasterMemberCheck();
+	$messageSender->sendGuildRequestInfo(0);
+	$messageSender->sendGuildRequestInfo(1);
+	$messageSender->sendGuildRequestInfo(2);
+	$messageSender->sendGuildRequestInfo(3);
+	$messageSender->sendGuildRequestInfo(4);
 }
 
 sub send_guild_info {
@@ -502,9 +521,10 @@ sub send_player_info {
 	# Send attack range
 	$data  = pack('C2 v', 0x3A, 0x01, $char->{attack_range});
 	# Send weapon/shield appearance
-	$data .= pack('C2 a4 C v2', 0xD7, 0x01, $char->{ID}, 2, $char->{weapon}, $char->{shield});
+	$data .= pack('C2 V C V2', 0xD7, 0x01, $char->{ID}, 2, $char->{weapon}, $char->{shield});
 	# Send status info
-	$data .= pack('v a4 v3 x', 0x119, $char->{ID}, $char->{opt1}, $char->{opt2}, $char->{option});
+	# TODO: Confirm this is doing what it's actually meant to
+	#$data .= pack('v V v3 x', 0x119, $char->{ID}, $char->{opt1}, $char->{opt2}, $char->{option});
 	$client->send($data);
 
 	if ($RunOnce) {
@@ -548,17 +568,35 @@ sub send_player_info {
 	$client->send($data);
 
 	# Send Hotkeys
-	if ($hotkeyList) {
+	if ($masterServer->{serverType} eq 'kRO_RagexeRE_2020_04_01b')
+	{
 		$data = undef;
-		if(@{$hotkeyList} <= 28) { # todo: there is also 07D9,254
-			$data .=  pack('v', 0x02B9); # old interface (28 hotkeys)
-		} else {
-			$data .=  pack('v', 0x07D9); # renewal interface as of: RagexeRE_2009_06_10a (38 hotkeys)
-		}
+		$data .=  pack('v', 0x0B20);
+		$data .=  pack('C', 0);
+		$data .=  pack('v', 0);
 		for (my $i = 0; $i < @{$hotkeyList}; $i++) {
 			$data .= pack('C V v', $hotkeyList->[$i]->{type}, $hotkeyList->[$i]->{ID}, $hotkeyList->[$i]->{lv});
 		}
-		$client->send($data) if (@{$hotkeyList});
+		$client->send($data);
+	}
+	else
+	{
+		if ($hotkeyList) {
+			print "sending hotkeys\n";
+			print Dumper($hotkeyList);
+			$data = undef;
+			if(@{$hotkeyList} <= 28) { # todo: there is also 07D9,254
+				$data .=  pack('v', 0x02B9); # old interface (28 hotkeys)
+			} else {
+				$data .=  pack('v', 0x07D9); # renewal interface as of: RagexeRE_2009_06_10a (38 hotkeys)
+				#$data .=  pack('v', 0x0b20); # renewal interface as of: RagexeRE_2009_06_10a (38 hotkeys)
+			}
+			for (my $i = 0; $i < @{$hotkeyList}; $i++) {
+				$data .= pack('C V v', $hotkeyList->[$i]->{type}, $hotkeyList->[$i]->{ID}, $hotkeyList->[$i]->{lv});
+			}
+			# C V v
+			$client->send($data) if (@{$hotkeyList});
+		}
 	}
 
 	# Send info about items on the ground
@@ -571,21 +609,47 @@ sub send_player_info {
 	}
 	$client->send($data) if (length($data) > 0);
 
-
-	# # Send info about surrounding players
-	foreach my $player (@{$playersList->getItems()}) {
-		my $coords = '';
-		shiftPack(\$coords, $player->{pos_to}{x}, 10);
-		shiftPack(\$coords, $player->{pos_to}{y}, 10);
-		shiftPack(\$coords, $player->{look}{body}, 4);
-		$data .= pack('C2 a4 v4 x2 v8 x2 v a4 a4 v x2 C2 a3 x2 C v',
-			0x2A, 0x02, $player->{ID}, $player->{walk_speed} * 1000,
-			$player->{opt1}, $player->{opt2}, $player->{option},
-			$player->{jobID}, $player->{hair_style}, $player->{weapon}, $player->{shield},
-			$player->{headgear}{low}, $player->{headgear}{top}, $player->{headgear}{mid},
-			$player->{hair_color}, $player->{look}{head}, $player->{guildID}, $player->{emblemID},
-			$player->{opt3}, $player->{stance}, $player->{sex}, $coords,
-			($player->{dead}? 1 : ($player->{sitting}? 2 : 0)), $player->{lv});
+	# Send info about surrounding players
+	if ($masterServer->{serverType} eq 'kRO_RagexeRE_2020_04_01b')
+	{
+		# TODO: finish going through the player stuff to make sure it's correct
+		$data = undef;
+		foreach my $player (@{$playersList->getItems()}) {
+			my $coords = '';
+			shiftPack(\$coords, $player->{pos}{x}, 10);
+			shiftPack(\$coords, $player->{pos}{y}, 10);
+			shiftPack(\$coords, $player->{look}{body}, 4);
+			$data .= $self->{recvPacketParser}->reconstruct({
+				switch => 'actor_exists',
+				coords => $coords,
+				walk_speed => $player->{walk_speed}*1000,
+				lowhead => $player->{headgear}{low},
+				midhead => $player->{headgear}{mid},
+				tophead => $player->{headgear}{top},
+				type => $player->{jobID},
+				HP => -1,
+				maxHP => -1,
+				isBoss => 0,
+				map { $_ => $player->{$_} } qw(object_type ID charID opt1 opt2 option hair_style weapon shield hair_color clothes_color head_dir costume guildID emblemID manner opt3 stance sex xSize ySize act lv font body_style name)
+			});
+		}		
+	}
+	else
+	{
+		foreach my $player (@{$playersList->getItems()}) {
+			my $coords = '';
+			shiftPack(\$coords, $player->{pos_to}{x}, 10);
+			shiftPack(\$coords, $player->{pos_to}{y}, 10);
+			shiftPack(\$coords, $player->{look}{body}, 4);
+			$data .= pack('C2 a4 v4 x2 v8 x2 v a4 a4 v x2 C2 a3 x2 C v',
+				0x2A, 0x02, $player->{ID}, $player->{walk_speed} * 1000,
+				$player->{opt1}, $player->{opt2}, $player->{option},
+				$player->{jobID}, $player->{hair_style}, $player->{weapon}, $player->{shield},
+				$player->{headgear}{low}, $player->{headgear}{top}, $player->{headgear}{mid},
+				$player->{hair_color}, $player->{look}{head}, $player->{guildID}, $player->{emblemID},
+				$player->{opt3}, $player->{stance}, $player->{sex}, $coords,
+				($player->{dead}? 1 : ($player->{sitting}? 2 : 0)), $player->{lv});
+		}
 	}
 	$client->send($data) if (length($data) > 0);
 }
@@ -860,6 +924,21 @@ sub guild_check {
 sub guild_info_request {
 	my ($self, $args, $client) = @_;
 	$args->{mangle} = 2;
+}
+
+sub unlock_keyboard {
+	my ($self, $client) = @_;
+	if ($masterServer->{serverType} eq 'kRO_RagexeRE_2020_04_01b')
+	{
+		$client->send(pack("v", 0x0B1B));
+	}
+}
+
+sub unlock_cart {
+	my ($self, $client) = @_;
+	
+	my $var = (0 << 0)|(1 << 9);
+	$client->send(pack('v2 V', 0x99b, 0, $var));
 }
 
 1;

@@ -24,6 +24,12 @@ sub new {
 	$self->{buying_store_items_list_pack} = "V v C V";
 	$self->{makable_item_list_pack} = "V4";
 
+	my %handlers = qw(
+		account_server_info 0AC4
+	);
+	
+	$self->{packet_lut}{$_} = $handlers{$_} for keys %handlers;
+
 	return $self;
 }
 

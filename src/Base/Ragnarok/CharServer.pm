@@ -85,6 +85,7 @@ sub game_login {
 		&& $session->{sex} == $args->{accountSex}
 		&& $session->{state} eq 'About to select character'
 	) {
+		sleep 1;
 		$client->close();
 
 	} else {
@@ -180,6 +181,7 @@ sub char_login {
 			}
 		}
 	}
+	sleep 1;
 	$client->close();
 }
 

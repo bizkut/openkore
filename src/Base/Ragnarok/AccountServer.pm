@@ -119,6 +119,8 @@ sub master_login {
 			accountSex => $session{sex},
 			servers => \@servers,
 		}));
+		
+		sleep 1;
 		$client->close();
 
 	} elsif ($result == ACCOUNT_NOT_FOUND) {
