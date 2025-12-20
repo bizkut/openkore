@@ -11,7 +11,7 @@ aiPlayer_apiUrl https://openrouter.ai/api/v1/chat/completions
 
 # Your API key (REQUIRED - get from https://openrouter.ai)
 # This key was tested and works with google/gemini-3-flash-preview
-aiPlayer_apiKey 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
+aiPlayer_apiKey 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
 
 # LLM model to use
 aiPlayer_model google/gemini-3-flash-preview
