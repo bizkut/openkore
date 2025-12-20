@@ -49,3 +49,4 @@ tables/**/npcs.txt
 tables/**/monsters.txt
 *.xpm
 *.weight
+plugins/aiPlayer/aiPlayer.txt
