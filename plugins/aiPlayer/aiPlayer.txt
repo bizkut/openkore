@@ -1,0 +1,46 @@
+# aiPlayer Plugin Default Configuration
+#
+# Copy these settings to your main config.txt and modify as needed
+
+########## API Configuration ##########
+# Enable/disable the AI player
+aiPlayer_enabled 1
+
+# OpenRouter API URL (default)
+aiPlayer_apiUrl https://openrouter.ai/api/v1/chat/completions
+
+# Your API key (REQUIRED - get from https://openrouter.ai)
+# This key was tested and works with google/gemini-3-flash-preview
+aiPlayer_apiKey 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
+
+# LLM model to use
+aiPlayer_model google/gemini-3-flash-preview
+
+########## Decision Settings ##########
+# Seconds between AI decisions (lower = more responsive, higher = cheaper)
+aiPlayer_decisionInterval 3
+
+# Maximum tokens for LLM response
+aiPlayer_maxTokens 300
+
+########## Safety Settings ##########
+# Maximum level difference to attack monsters
+# (e.g., 10 means only attack monsters up to 10 levels above you)
+aiPlayer_maxLevelDiff 10
+
+# Minimum HP percentage to engage in combat
+aiPlayer_minHpToAttack 30
+
+########## Feature Toggles ##########
+# Handle quest objectives
+aiPlayer_handleQuests 1
+
+# Handle combat decisions
+aiPlayer_handleCombat 1
+
+# Handle social interactions (chat, party, etc.)
+aiPlayer_handleSocial 0
+
+########## Debug Settings ##########
+# Enable debug logging
+aiPlayer_debug 0
