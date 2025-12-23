@@ -23,6 +23,51 @@
 To run OpenKore you will need:
 * [Read the Requirements page on our wiki](https://openkore.com/wiki/How_to_run_OpenKore#Requirements)
 
+## Asgard's Glory Server (Docker)
+
+This fork includes Docker support for the **Asgard's Glory** private server.
+
+### Quick Start with Docker
+
+```bash
+# Clone the repository
+git clone https://github.com/bizkut/openkore.git
+cd openkore
+
+# Configure your credentials
+# Edit control/config.txt and set:
+#   username YOUR_USERNAME
+#   password YOUR_PASSWORD
+
+# Build and run
+docker compose up -d
+
+# View logs
+docker compose logs -f
+
+# Stop
+docker compose down
+```
+
+### Features Configured for Asgard's Glory
+- **Server**: `asgardsglory.ddns.net:6900`
+- **Auto-leveling**: Hunts in Prontera Field (prt_fild08)
+- **Auto-stats**: Balanced stat allocation
+- **Auto-loot**: Picks up all items
+- **@refresh macro**: Auto-refreshes when NPC detection fails
+- **Training Ground**: Auto-teleports to `@go 15` for fast early levels
+
+### Configuration Files
+| File | Purpose |
+|------|---------|
+| `control/config.txt` | Main config (credentials, server, settings) |
+| `control/eventMacros.txt` | EventMacro automations |
+| `control/macros.txt` | Regular macro plugin (@refresh fix) |
+| `tables/servers.txt` | Server definitions |
+
+For more info: [Asgard's Glory Starter Guide](https://asgardsglory.fandom.com/wiki/Starter_Guide)
+
+
 ## Quickstart
 
 1. [Download OpenKore](https://github.com/OpenKore/openkore/archive/master.zip) and extract it. Alternatively, you could press the **Windows Key + R**, type in ``cmd`` & enter. Run the following command in the cmd to clone.

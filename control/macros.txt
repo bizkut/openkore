@@ -1,0 +1,23 @@
+# OpenKore Macros for Asgard's Glory
+# Uses the regular macro plugin (not eventMacro)
+# This plugin supports console triggers for @refresh
+# ============================================
+
+# --- Refresh NPC when not found (from AG starter guide) ---
+# Uses @refresh command to reload map data when NPC detection fails
+automacro refreshNPC {
+	console /could not find npc|Could not find an NPC|Npc did not respond/i
+	timeout 5
+	call {
+		do c @refresh
+	}
+}
+
+# --- Refresh on unknown portal ---
+automacro refreshPortal {
+	console /Unknown.*Portal|Unknown #\d+/i
+	timeout 10
+	call {
+		do c @refresh
+	}
+}
