@@ -306,8 +306,9 @@ sub request {
 	my (@unusableJS, @usableJS, @equipmentJS, @uequipmentJS);
 	my (@unusableID, @usableID, @equipmentID, @uequipmentID);
 	my $Item_IDN;
-	for (my $i = 0; $i < $char->inventory->size; $i++) {
-		my $item = $char->inventory->get($i);
+	if ($char) {
+		for (my $i = 0; $i < $char->inventory->size; $i++) {
+			my $item = $char->inventory->get($i);
 		next unless $item && %{$item};
 		if (($item->{type} == 3 || $item->{type} == 6 ||
 			$item->{type} == 10) && !$item->{equipped})
@@ -332,14 +333,15 @@ sub request {
 				push @uequipmentJS, '<td><a class="btn btn-mini btn-inverse" href="/handler?csrf=' . $csrf . '&command=eq+' . $item->{invIndex} . '">' . T('Equip') . '</a></td><td><a class="btn btn-mini btn-danger" href="/handler?csrf=' . $csrf . '&command=drop+' . $item->{invIndex} . '">' . T('Drop 1') . '</a></td>';
 			}
 		}
+		}
 	}
-	my @statuses = (keys %{$char->{statuses}});
+	my @statuses = ($char ? (keys %{$char->{statuses}}) : ());
 	
 # Show cart
 	my (@cartItemName, @cartItemAmount, @cartItemJS, @cartItemID);
 	my $cartActive = 'disabled';
 	
-	if ($char->cartActive) {
+	if ($char && $char->cartActive) {
 		$cartActive = undef;
 		for (my $i = 0; $i < $char->cart->size; $i++) {
 			my $item = $char->cart->get($i);
@@ -360,8 +362,9 @@ sub request {
 	my (@storageUnusableAmount, @storageUsableAmount, @storageEquipmentAmount);
 	my (@storageUnusableID, @storageUsableID, @storageEquipmentID);
 	my (@storageUnusableGetButton, @storageUsableGetButton, @storageEquipmentGetButton);
-	for (my $i = 0; $i < $char->storage->size; $i++) {
-		my $item = $char->storage->get($i);
+	if ($char) {
+		for (my $i = 0; $i < $char->storage->size; $i++) {
+			my $item = $char->storage->get($i);
 		next if (!$item);
 		
 		if ($item->usable) {
@@ -380,6 +383,7 @@ sub request {
 			push @storageUnusableAmount, $item->{amount};
 			push @storageUnusableGetButton, '<td><a class="btn btn-mini btn-inverse" href="/handler?csrf=' . $csrf . '&command=storage+get+' . $i . '">' . T('Get') . '</a></td><td></td>' if ($char->storage->isReady);
 		}
+	}
 	}
 
 # Show members of the clan
@@ -539,7 +543,7 @@ sub request {
 			push @selfShopItemName, $item->{name};
 		}
 		$selfShopButton = '<a href="/handler?csrf='.$csrf.'&command=closeshop" class="btn btn-danger btn-mini pull-right"><i class="icon-shopping-cart icon-white"></i> closeshop</a>';
-	} elsif (!$shopstarted && $char->{skills}{MC_VENDING}{lv} && $char->cartActive && $shop{title_line}) {
+	} elsif ($char && !$shopstarted && $char->{skills}{MC_VENDING}{lv} && $char->cartActive && $shop{title_line}) {
 		$selfShopButton = '<a href="/handler?csrf='.$csrf.'&command=openshop" class="btn btn-success btn-mini pull-right"><i class="icon-shopping-cart icon-white"></i> openshop</a>';
 	} else {
 		$selfShopButton = " "

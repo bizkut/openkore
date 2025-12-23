@@ -17,6 +17,7 @@ services:
     ports:
       - "6901:6901"
       - "1025:1025"
+      - "1026:1026"
     networks:
       - openkore-network
 

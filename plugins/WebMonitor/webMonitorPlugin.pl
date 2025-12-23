@@ -95,7 +95,9 @@ sub post_loading {
 
 	eval {
 		require WebMonitor::WebSocketServer;
-		$socketServer = new WebMonitor::WebSocketServer(undef, $bind);
+		my $ws_port = $config{webSocketPort} || ($port + 1);
+		$socketServer = new WebMonitor::WebSocketServer($ws_port, $bind);
+		print "WebSocket server started at ws://$bind:$ws_port/\n" if $socketServer;
 	};
 	unless ($socketServer) {
 		error "WebSocket server failed to start: $@\n"
