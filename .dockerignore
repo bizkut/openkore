@@ -1,0 +1,20 @@
+# Git
+.git
+.github
+.gitignore
+
+# Windows executables (not needed in Docker)
+*.exe
+*.dll
+
+# Editor configs
+.editorconfig
+.perltidyrc
+
+# URLs and unneeded files
+*.url
+
+# Docker files (no need to copy recursively)
+docker-compose.yml
+Dockerfile
+.dockerignore

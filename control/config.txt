@@ -3,12 +3,12 @@
 
 ######## Login options and server-specific options ########
 
-master Landverse
-server
-username
-password
+master Asgards Glory
+server 0
+username YOUR_USERNAME
+password YOUR_PASSWORD
 loginPinCode
-char
+char 0
 otpSeed
 
 # Poseidon Settings: https://openkore.com/wiki/Poseidon
@@ -20,9 +20,9 @@ poseidonTimeout 5
 bindIp
 forceMapIP
 
-# 1 = hook into RO client, 2 = Act as stand-alone proxy, proxy = act as true proxy
+# 0 = standalone mode (no client), 1 = hook into RO client, 2 = Act as stand-alone proxy
 # https://openkore.com/wiki/XKore
-XKore 1
+XKore 0
 XKore_port 2350
 XKore_dll NetRedirect.dll
 XKore_injectDLL 0
@@ -32,14 +32,14 @@ XKore_bypassBotDetection 0
 XKore_exeName ragexe.exe
 
 # XKore 2 / Proxy configuration
-XKore_listenIp 127.0.0.1
+XKore_listenIp 0.0.0.0
 XKore_listenPort 6901
 XKore_publicIp 127.0.0.1
 XKore_ID
 
 # It is not advised to set secureAdminPassword if you're using Xkore 2
-secureAdminPassword 1
-adminPassword zogaibre
+secureAdminPassword 0
+adminPassword 123456
 callSign
 commandPrefix ;
 callSignGM 0
@@ -64,16 +64,19 @@ alias_heal sp 28
 allowedMaps
 allowedMaps_reaction 1
 
+#==========================================================
+# AUTO ATTACK - Full automation for killing monsters
+#==========================================================
 attackAuto 2
 attackAuto_party 1
 attackAuto_onlyWhenSafe 0
 attackAuto_followTarget 1
 attackAuto_inLockOnly 1
 attackAuto_notInTown 1
-attackAuto_notWhile_storageAuto 1
-attackAuto_notWhile_buyAuto 1
-attackAuto_notWhile_sellAuto 1
-attackAuto_considerDamagedAggressive 0
+attackAuto_notWhile_storageAuto 0
+attackAuto_notWhile_buyAuto 0
+attackAuto_notWhile_sellAuto 0
+attackAuto_considerDamagedAggressive 1
 attackDistance 1
 attackDistanceAuto 1
 attackMaxDistance 1
@@ -85,21 +88,20 @@ attackNoGiveup 0
 attackCanSnipe 0
 attackCheckLOS 1
 attackRouteMaxPathDistance 20
-attackLooters 0
-attackLooters_dist 1
+attackLooters 1
+attackLooters_dist 5
 attackChangeTarget 1
 aggressiveAntiKS 0
 
 attackUpdateMonsterPos 1
 
 # the following attack keys are meant to work only in private server (rAthena/Hercules)
-# if you enable this in a official server you character will act weird, because character can't attack beyond the range
 attackBeyondMaxDistance_waitForAgressive 0
 attackBeyondMaxDistance_sendAttackWhileWaiting 0
 attackSendAttackWithMove 0
 attackWaitApproachFinish 1
 
-autoMoveOnDeath 0
+autoMoveOnDeath 1
 autoMoveOnDeath_x
 autoMoveOnDeath_y
 autoMoveOnDeath_map
@@ -136,7 +138,7 @@ autoRestart 0
 autoRestartMin 10800
 autoRestartSeed 3600
 
-autoRestartSleep 1
+autoRestartSleep 0
 autoSleepMin 900
 autoSleepSeed 900
 
@@ -147,10 +149,13 @@ autoSpell
 autoSpell_safe
 autoPoison
 
+#==========================================================
+# GM AVOIDANCE - Safety feature
+#==========================================================
 avoidGM_namePattern
-avoidGM_near 0
+avoidGM_near 1
 avoidGM_near_inTown 0
-avoidGM_talk 0
+avoidGM_talk 1
 avoidGM_reconnect 1800
 avoidGM_ignoreList
 
@@ -168,7 +173,10 @@ cachePlayerNames_maxSize 100
 
 clientSight 17
 
-dcPause 1
+#==========================================================
+# DISCONNECT CONDITIONS
+#==========================================================
+dcPause 0
 dcOnDeath 0
 dcOnDualLogin 0
 dcOnDisconnect 0
@@ -177,13 +185,16 @@ dcOnMaxReconnections 0
 dcOnMute 0
 dcOnPM 0
 dcOnZeny 0
-dcOnStorageFull 1
+dcOnStorageFull 0
 dcOnPlayer 0
 dcOnServerShutDown 0
 dcOnServerClose 0
 dcOnJobLevel
 dcOnLevel
 
+#==========================================================
+# FOLLOW MODE - Disabled for solo leveling
+#==========================================================
 follow 0
 followTarget
 followEmotion 1
@@ -195,12 +206,15 @@ followLostStep 12
 followSitAuto 0
 followBot 0
 
+#==========================================================
+# AUTO LOOT - Pick up everything
+#==========================================================
 itemsTakeAuto 2
-itemsTakeAuto_party 0
+itemsTakeAuto_party 1
 itemsGatherAuto 2
 itemsGatherAuto_notInTown 0
-itemsGatherAutoMinPlayerDistance 6
-itemsGatherAutoMinPortalDistance 5
+itemsGatherAutoMinPlayerDistance 4
+itemsGatherAutoMinPortalDistance 4
 itemsMaxWeight 89
 itemsMaxWeight_sellOrStore 48
 itemsMaxNum_sellOrStore 99
@@ -208,12 +222,18 @@ cartMaxWeight 7900
 itemsTakeGreed 0
 itemsCheckWeight 1
 
-lockMap
+#==========================================================
+# LOCK MAP - Hunting area (prt_fild08 = Prontera Field with Porings)
+#==========================================================
+lockMap prt_fild08
 lockMap_x
 lockMap_y
 lockMap_randX
 lockMap_randY
 
+#==========================================================
+# ROUTING & NAVIGATION
+#==========================================================
 route_escape_reachedNoPortal 1
 route_escape_randomWalk 1
 route_escape_shout
@@ -227,7 +247,7 @@ route_teleport 0
 route_teleport_minDistance 75
 route_teleport_maxTries 8
 route_teleport_notInMaps
-route_step 10
+route_step 15
 route_removeMissingPortals_NPC 1
 route_removeMissingPortals 0
 route_tryToGuessMissingPortalByDistance 1
@@ -235,7 +255,6 @@ route_reAddMissingPortals 1
 route_randomFactor 0
 
 # Maximum walking path distance (client setting). Default: 17
-# This corresponds to max_walk_path in server configuration
 maxWalkPathDistance 17
 
 runFromTarget 0
@@ -247,9 +266,12 @@ runFromTarget_noAttackMethodFallback 0
 runFromTarget_noAttackMethodFallback_attackMaxDist 14
 runFromTarget_noAttackMethodFallback_minStep 8
 
-saveMap
-saveMap_x
-saveMap_y
+#==========================================================
+# SAVE POINT
+#==========================================================
+saveMap prontera
+saveMap_x 156
+saveMap_y 191
 saveMap_warpToBuyOrSell 1
 saveMap_warpChatCommand
 memo1
@@ -257,6 +279,9 @@ memo2
 memo3
 memo4
 
+#==========================================================
+# SHOP - Auto vending disabled
+#==========================================================
 shopAuto_open 0
 shop_random 0
 shop_useSkill 1
@@ -264,10 +289,13 @@ shop_useSkill 1
 buyerShopAuto_open 0
 buyerShop_random 0
 
-sitAuto_hp_lower 40
-sitAuto_hp_upper 100
-sitAuto_sp_lower 0
-sitAuto_sp_upper 0
+#==========================================================
+# AUTO SIT - Rest when HP/SP low
+#==========================================================
+sitAuto_hp_lower 30
+sitAuto_hp_upper 80
+sitAuto_sp_lower 20
+sitAuto_sp_upper 80
 sitAuto_follow 0
 sitAuto_over_50 0
 sitAuto_idle 1
@@ -275,26 +303,35 @@ sitAuto_look
 sitAuto_look_from_wall
 sitTensionRelax 0
 
-statsAddAuto 0
-statsAddAuto_list
+#==========================================================
+# AUTO STAT ALLOCATION - Balanced build for Novice
+#==========================================================
+statsAddAuto 1
+statsAddAuto_list str 9, agi 9, vit 9, int 9, dex 9, luk 9, str 20, agi 20, vit 20
 statsAddAuto_dontUseBonus 0
 statsAdd_over_99 1
 
-skillsAddAuto 0
+#==========================================================
+# AUTO SKILL ALLOCATION
+#==========================================================
+skillsAddAuto 1
 skillsAddAuto_list
 
 tankMode 0
 tankModeTarget
 
-teleportAuto_hp 10
+#==========================================================
+# AUTO TELEPORT - Escape when in danger
+#==========================================================
+teleportAuto_hp 15
 teleportAuto_sp 0
 teleportAuto_idle 0
 teleportAuto_portal 0
 teleportAuto_search 0
-teleportAuto_minAggressives 0
-teleportAuto_minAggressivesInLock 0
+teleportAuto_minAggressives 4
+teleportAuto_minAggressivesInLock 5
 teleportAuto_onlyWhenSafe 0
-teleportAuto_maxDmg 500
+teleportAuto_maxDmg 0
 teleportAuto_maxDmgInLock 0
 teleportAuto_deadly 1
 teleportAuto_useSkill 1
@@ -303,12 +340,12 @@ teleportAuto_allPlayers 0
 teleportAuto_notPlayers
 teleportAuto_atkCount 0
 teleportAuto_atkMiss 10
-teleportAuto_unstuck 0
+teleportAuto_unstuck 1
 teleportAuto_lostTarget 0
 teleportAuto_dropTarget 0
 teleportAuto_dropTargetKS 0
 teleportAuto_dropTargetHidden 0
-teleportAuto_attackedWhenSitting 0
+teleportAuto_attackedWhenSitting 1
 teleportAuto_totalDmg 0
 teleportAuto_totalDmgInLock 0
 teleportAuto_equip_leftAccessory
@@ -318,13 +355,16 @@ teleportAuto_useItemForRespawn
 teleportAuto_item1
 teleportAuto_item2
 
-dealAuto 1
+#==========================================================
+# PARTY & SOCIAL - Auto accept
+#==========================================================
+dealAuto 2
 dealAuto_names
-partyAuto 1
-partyAutoShare 0
-partyAutoShareItem 0
-partyAutoShareItemDiv 0
-guildAutoDeny 1
+partyAuto 2
+partyAutoShare 1
+partyAutoShareItem 1
+partyAutoShareItemDiv 1
+guildAutoDeny 0
 attendanceAuto 1
 
 verbose 1
@@ -347,10 +387,13 @@ wx_map_portalSticking 5
 wx_map_route
 wx_npcTalk
 wx_captcha
-showAllDamage 0
+showAllDamage 1
 manualURL https://openkore.com/wiki/Manual
 forumURL https://forums.openkore.com
 
+#==========================================================
+# LOGGING
+#==========================================================
 logChat 1
 logPrivateChat 1
 logPartyChat 1
@@ -362,7 +405,7 @@ logEmoticons
 logConsole 1
 logAppendUsername 1
 logAppendServer 0
-monsterLog 0
+monsterLog 1
 playerLog 0
 logDead 1
 
@@ -375,7 +418,7 @@ buyerShopTitleOversize 0
 sleepTime 10000
 
 ignoreAll 0
-itemHistory 0
+itemHistory 1
 autoTalkCont 1
 noAutoSkill 0
 portalCompile 1
@@ -385,7 +428,7 @@ missDamage 0
 
 tankersList
 
-repairAuto 0
+repairAuto 1
 repairAuto_list
 
 status_mapProperty 0
@@ -404,8 +447,8 @@ mercenary_attackAuto_notWhile_buyAuto 1
 mercenary_attackAuto_notWhile_sellAuto 1
 mercenary_attackAuto_considerDamagedAggressive 0
 mercenary_attackAuto_onlyWhenSafe 0
-mercenary_attackAuto_duringRandomWalk 0
-mercenary_attackAuto_duringItemsTake 0
+mercenary_attackAuto_duringRandomWalk 1
+mercenary_attackAuto_duringItemsTake 1
 mercenary_attackDistance 1
 mercenary_attackMaxDistance 1
 mercenary_attackDistanceAuto 1
@@ -474,8 +517,8 @@ homunculus_attackAuto_notWhile_buyAuto 1
 homunculus_attackAuto_notWhile_sellAuto 1
 homunculus_attackAuto_considerDamagedAggressive 0
 homunculus_attackAuto_onlyWhenSafe 0
-homunculus_attackAuto_duringRandomWalk 0
-homunculus_attackAuto_duringItemsTake 0
+homunculus_attackAuto_duringRandomWalk 1
+homunculus_attackAuto_duringItemsTake 1
 homunculus_attackDistance 1
 homunculus_attackMaxDistance 1
 homunculus_attackDistanceAuto 1
@@ -690,6 +733,39 @@ doCommand {
 	inCart
 	inMap
 	manualAI 0
+}
+
+#==========================================================
+# AUTO HEAL - Use potions when HP low
+#==========================================================
+useSelf_item Red Potion {
+	hp < 50%
+	minAmount 1
+	disabled 0
+}
+
+useSelf_item Orange Potion {
+	hp < 40%
+	minAmount 1
+	disabled 0
+}
+
+useSelf_item Yellow Potion {
+	hp < 30%
+	minAmount 1
+	disabled 0
+}
+
+useSelf_item White Potion {
+	hp < 25%
+	minAmount 1
+	disabled 0
+}
+
+useSelf_item Butterfly Wing {
+	hp < 10%
+	minAmount 1
+	disabled 0
 }
 
 useSelf_skill {
@@ -953,38 +1029,31 @@ useSelf_item {
 
 ######## Autostorage/autosell ########
 
-buyAuto {
-	npc
-	npc_steps b
-	isMarket 0
-	standpoint
-	distance 3
-	price
-	minAmount 2
-	maxAmount 3
-	batchSize
-	onlyIdentified
+buyAuto Red Potion {
+	npc prontera 146 232
+	npc_steps b e
+	distance 20
+	minAmount 5
+	maxAmount 30
 	disabled 0
-	maxBase
-	minBase
 }
 
-sellAuto 0
-sellAuto_npc
+sellAuto 1
+sellAuto_npc prontera 124 76
 sellAuto_standpoint
-sellAuto_distance 3
+sellAuto_distance 20
 sellAuto_maxDistance
-sellAuto_npc_steps s
+sellAuto_npc_steps s e
 
-storageAuto 0
+storageAuto 1
 storageAuto_onStart 0
-storageAuto_npc
+storageAuto_npc prontera 148 162
 storageAuto_standpoint
-storageAuto_distance 3
+storageAuto_distance 20
 storageAuto_maxDistance
 storageAuto_npc_type 1
 storageAuto_type 0
-storageAuto_npc_steps
+storageAuto_npc_steps c r1 n
 storageAuto_password
 storageAuto_keepOpen 0
 storageAuto_useChatCommand
@@ -994,7 +1063,7 @@ storageAuto_notAfterDeath
 relogAfterStorage 0
 minStorageZeny 50
 
-npcTimeResponse
+npcTimeResponse 5
 npcWrongStepsMethod 0
 
 getAuto {

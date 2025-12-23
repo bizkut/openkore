@@ -1,0 +1,118 @@
+# OpenKore eventMacros Configuration for Asgard's Glory
+# Based on server starter guide: https://asgardsglory.fandom.com/wiki/Starter_Guide
+# ============================================
+
+# ============================================
+# VARIABLES
+# ============================================
+
+$levelingMap = prt_fild08
+
+# ============================================
+# AUTO-MACROS - Triggered automatically
+# ============================================
+
+# --- Novice Training Ground for fast levels (from AG starter guide) ---
+# Run this for new characters to get fast early levels
+automacro goTrainingGround {
+	BaseLevel < 15
+	InMap prontera
+	timeout 300
+	call {
+		log Going to Novice Training Ground for fast levels!
+		do c @go 15
+	}
+}
+
+# --- Auto-change job when ready ---
+automacro autoJobChange {
+	BaseLevel >= 10
+	JobLevel >= 10
+	InMap prontera
+	timeout 60
+	call {
+		log Job change requirements met! Talk to Job Master NPC!
+		do c Ready for job change! Base Lv: $.blvl Job Lv: $.jlvl
+	}
+}
+
+# --- Low potions - walk to NPC and buy ---
+automacro lowPotions {
+	InInventory "Red Potion" < 5
+	timeout 120
+	call {
+		log Running low on Red Potions! Going to buy more...
+		do buy
+	}
+}
+
+# --- Auto-level up celebration ---
+automacro levelUp {
+	SimpleHookEvent BaseLevel
+	call {
+		log Congratulations! Base Level $.blvl!
+		do e 20
+	}
+}
+
+# --- Job level up celebration ---
+automacro jobLevelUp {
+	SimpleHookEvent JobLevel
+	call {
+		log Congratulations! Job Level $.jlvl!
+		do e 21
+	}
+}
+
+# --- Disconnect on very low HP ---
+automacro emergencyEscape {
+	CurrentHP < 50
+	timeout 5
+	call {
+		log EMERGENCY! HP critically low!
+		do tele
+	}
+}
+
+# --- Use free healer in Prontera (AG server feature) ---
+# NOTE: Disabled - NPC coordinates need verification for your server
+automacro useHealer {
+	CurrentHP < 200
+	InMap prontera
+	timeout 30
+	disabled 1
+	call {
+		log Using Prontera healer...
+		do talknpc 159 193 c c
+	}
+}
+
+# ============================================
+# MACROS - Called manually or by automacros
+# ============================================
+
+macro goLevel {
+	log Walking to leveling map...
+	do move $levelingMap
+	do ai auto
+}
+
+macro goTraining {
+	log Going to Novice Training Ground...
+	do c @go 15
+}
+
+macro changeJob {
+	log Walking to Job Master...
+	do talknpc prontera 153 193 c c c c
+}
+
+macro storeItems {
+	log Storing items in Kafra...
+	do storage
+}
+
+macro refresh {
+	log Refreshing map...
+	do c @refresh
+}

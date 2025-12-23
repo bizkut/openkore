@@ -1,0 +1,23 @@
+services:
+  openkore:
+    build: .
+    container_name: openkore-asgardsglory
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+    volumes:
+      # Persist control configurations (logs, etc.)
+      - ./control:/app/openkore/control
+      # Persist plugins
+      - ./plugins:/app/openkore/plugins
+    environment:
+      - OPENKORE_INTERFACE=Console
+    # XKore 2 port (if you want to connect with RO client)
+    ports:
+      - "6901:6901"
+    networks:
+      - openkore-network
+
+networks:
+  openkore-network:
+    driver: bridge

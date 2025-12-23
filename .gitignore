@@ -50,3 +50,8 @@ tables/**/monsters.txt
 *.xpm
 *.weight
 plugins/aiPlayer/aiPlayer.txt
+
+# OpenKore credentials - DO NOT COMMIT
+control/config.txt.local
+*.log
+errors.txt

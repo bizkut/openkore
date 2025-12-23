@@ -303,6 +303,18 @@ serverType kRO_RagexeRE_2009_11_04a
 serverEncoding Western
 addTableFolders translated/kRO_english;kRO
 
+# Asgard's Glory Private Server - https://asgardsglory.fandom.com/
+[Asgards Glory]
+ip asgardsglory.ddns.net
+port 6900
+private 1
+master_version 0
+version 128
+charBlockSize 155
+serverType kRO_RagexeRE_2020_04_01b
+serverEncoding Western
+addTableFolders kRO/RagexeRE_2020_04_01b;translated/kRO_english;kRO
+
 ####################
 # Dead
 
