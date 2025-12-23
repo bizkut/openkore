@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     python3 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install required Perl modules
+# Install required Perl modules (including webMonitor dependencies)
 RUN cpanm --notest \
     Time::HiRes \
     Carp::Assert \
@@ -28,7 +28,12 @@ RUN cpanm --notest \
     HTML::Entities \
     HTTP::Tiny \
     URI::Escape \
-    Exception::Class
+    Exception::Class \
+    Protocol::WebSocket \
+    File::ReadBackwards \
+    JSON \
+    JSON::Any \
+    Math::Random::Secure
 
 # Create app directory
 WORKDIR /app/openkore

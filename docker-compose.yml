@@ -13,8 +13,10 @@ services:
     environment:
       - OPENKORE_INTERFACE=Console
     # XKore 2 port (if you want to connect with RO client)
+    # webMonitor port (web-based monitoring)
     ports:
       - "6901:6901"
+      - "1025:1025"
     networks:
       - openkore-network
 

@@ -5,8 +5,8 @@
 
 master Asgards Glory
 server 0
-username YOUR_USERNAME
-password YOUR_PASSWORD
+username bizkut
+password @Nadia2566
 loginPinCode
 char 0
 otpSeed
@@ -22,7 +22,7 @@ forceMapIP
 
 # 0 = standalone mode (no client), 1 = hook into RO client, 2 = Act as stand-alone proxy
 # https://openkore.com/wiki/XKore
-XKore 0
+XKore 2
 XKore_port 2350
 XKore_dll NetRedirect.dll
 XKore_injectDLL 0
@@ -34,12 +34,14 @@ XKore_exeName ragexe.exe
 # XKore 2 / Proxy configuration
 XKore_listenIp 0.0.0.0
 XKore_listenPort 6901
-XKore_publicIp 127.0.0.1
+XKore_publicIp 0.0.0.0
 XKore_ID
 
 # It is not advised to set secureAdminPassword if you're using Xkore 2
 secureAdminPassword 0
 adminPassword 123456
+webBind 0.0.0.0
+webPort 1025
 callSign
 commandPrefix ;
 callSignGM 0
@@ -1091,3 +1093,8 @@ logToFile_Messages
 logToFile_Warnings
 history_max 50
 macro_orphans terminate
+
+######## Web Monitor Plugin ########
+webBind 0.0.0.0
+webPort 1025
+webMapURL http://www.ragdata.com/images/maps/%s.jpg
